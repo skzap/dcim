@@ -1,6 +1,6 @@
 let config = {
   master: {
-    ip: '127.0.0.1',
+    ip: '192.168.1.193',
     ws: {
       port: 4545,
       pingInterval: 10000
