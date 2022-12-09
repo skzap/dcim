@@ -12,7 +12,8 @@ let config = {
   slave: {
     ws: {
       pingInterval: 11000,
-      monitorInterval: 5000
+      monitorInterval: 5000,
+      reconnectInterval: 5000
     }
   }
 }
