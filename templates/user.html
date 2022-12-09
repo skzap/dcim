@@ -3,7 +3,6 @@
   <thead>
     <th>Host</th>
     <th>CPU</th>
-    <th>Threads</th>
     <th>RAM</th>
     <th>GPU</th>
   </thead>
@@ -11,9 +10,9 @@
     {{#bareMetal}}
     <tr>
       <td>{{os.hostname}}</td>
-      <td>{{os.cpuModel}}</td>
-      <td>{{os.cpuThreads}}</td>
+      <td>{{os.cpuThreads}} x {{os.cpuModel}}</td>
       <td>{{os.freememDisp}} / {{os.totalmemDisp}}</td>
+      <td>{{gpu.product}}</td>
     </tr>
     {{/bareMetal}}
   </tbody>
