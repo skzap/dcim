@@ -28,6 +28,13 @@ for (const fname in os) {
     monitor.os[fname] = os[fname]()
   }
 }
+for (const network in monitor.os.networkInterfaces) {
+  let net = monitor.os.networkInterfaces[network]
+  for (let i = 0; i < net.length; i++) {
+    if (!net[i].internal && net[i].family == 'IPv4')
+      monitor.os.ip = net[i].address
+  }
+}
 setInterval(refreshSpecs, 5000)
 function refreshSpecs() {
   monitor.os.cpus = os.cpus()

@@ -5,6 +5,7 @@
     <th>CPU</th>
     <th>RAM</th>
     <th>GPU</th>
+    <th>IP</th>
   </thead>
   <tbody>
     {{#bareMetal}}
@@ -13,6 +14,7 @@
       <td>{{os.cpuThreads}} x {{os.cpuModel}}</td>
       <td>{{os.freememDisp}} / {{os.totalmemDisp}}</td>
       <td>{{gpu.product}}</td>
+      <td>{{os.ip}}</td>
     </tr>
     {{/bareMetal}}
   </tbody>
