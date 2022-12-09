@@ -1,0 +1,32 @@
+<div class="columns">
+  <div class="column col-3 col-lg-4 col-md-5 col-sm-7 col-xs-10 p-centered">
+    {{#error}}
+      <div class="toast toast-error">
+        <h6>Error</h6>
+        {{error}}
+      </div>
+    {{/error}}
+    {{#success}}
+      <div class="toast toast-success">
+        <h6>Success</h6>
+        {{success}}
+      </div>
+    {{/success}}
+    <form action="/signup" method="post">
+      <div class="form-group">
+        <label class="form-label" for="input-username">Username</label>
+        <input class="form-input" type="text" id="input-username" name="username">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="input-password">Password</label>
+        <input class="form-input" type="password" id="input-password" name="password">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="input-password-repeat">Repeat Password</label>
+        <input class="form-input" type="password" id="input-password-repeat" name="password-repeat">
+      </div>
+      <br />
+      <input class="btn btn-primary" type="submit" value="Signup">
+    </form>
+  </div>
+</div>

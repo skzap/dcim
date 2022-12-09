@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{siteName}}</title>
+  <link rel="icon" type="image/png" href="/img/logo.png">
+  <link rel="stylesheet" href="/css/spectre.min.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head>
+<body class="">
+  <header class="navbar" style="padding-bottom: 2em;">
+    <section class="navbar-section">
+      <a href="/" class="btn btn-link">Home</a>
+      <a href="/pricing" class="btn btn-link">Pricing</a>
+    </section>
+    {{#user}}
+    <section class="navbar-section">
+      <a href="/logout" class="btn btn-link"><button class="btn btn-sm">Logout</button></a>
+      <a href="/user" class="btn btn-link"><button class="btn btn-sm btn-primary">{{user._id}}</button></a>
+    </section>
+    {{/user}}
+    {{^user}}
+    <section class="navbar-section">
+      <a href="/signup" class="btn btn-link"><button class="btn btn-sm">Signup</button></a>
+      <a href="/login" class="btn btn-link"><button class="btn btn-sm btn-primary">Login</button></a>
+    </section>
+    {{/user}}
+  </header>
+  <div class="container">
+    @@CONTENT@@
+  </div>
+</body>
+</html>
