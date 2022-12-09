@@ -25,7 +25,6 @@ let ws = {
     });
 
     setInterval(() => {
-      console.log('sending monitor')
       ws.client.send(JSON.stringify({
         type: 'monitor',
         data: monitor
