@@ -1,20 +1,22 @@
 import {default as Mustache} from 'mustache'
 import {promises as fs} from 'fs'
+import config from './config.js'
 
 let constants = {
-  siteName: 'Eiffel Cloud'
+  siteName: config.master.http.siteName
 }
 
 let templater = {
   templates: {},
+  scripts: {},
   init: async () => {
-    let files = [
-      'root','index','login','signup','user'
-    ]
-    for (let i = 0; i < files.length; i++)
-      templater.templates[files[i]] = await fs.readFile('./templates/'+files[i]+'.html', 'utf8')
-    templater.root = Mustache.render(templater.templates.root, constants)
-    console.log("Templates initialized")
+    let templates = await fs.readdir(config.rootDirectory+'templates/')
+    for (let i = 0; i < templates.length; i++)
+      templater.templates[templates[i].split('.')[0]] = await fs.readFile(config.rootDirectory+'templates/'+templates[i], 'utf8')
+    console.log(Object.keys(templater.templates).length+" templates initialized")
+
+    templater.scripts = await fs.readdir(config.rootDirectory+'assets/scripts/')
+    console.log(Object.keys(templater.scripts).length+" scripts initialized")
   },
   index: async (data) => {
     let root = Mustache.render(templater.templates.root, Object.assign(data, constants))
@@ -31,10 +33,15 @@ let templater = {
     let signup = Mustache.render(templater.templates.signup, Object.assign(data, constants))
     return root.replace('@@CONTENT@@', signup)
   },
-  user: async (data) => {
+  hosts: async (data) => {
     let root = Mustache.render(templater.templates.root, Object.assign(data, constants))
-    let user = Mustache.render(templater.templates.user, Object.assign(data, constants))
-    return root.replace('@@CONTENT@@', user)
+    let hosts = Mustache.render(templater.templates.hosts, Object.assign(data, constants))
+    return root.replace('@@CONTENT@@', hosts)
+  },
+  host: async (data) => {
+    let root = Mustache.render(templater.templates.root, Object.assign(data, constants))
+    let host = Mustache.render(templater.templates.host, Object.assign(data, constants))
+    return root.replace('@@CONTENT@@', host)
   }
 }
 

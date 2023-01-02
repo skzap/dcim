@@ -1,0 +1,12 @@
+[Unit]
+Description=Data Center Infrastructure Management
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/root/dcim
+ExecStart=node /root/dcim/index slave
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

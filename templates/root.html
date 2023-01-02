@@ -14,6 +14,9 @@
     <section class="navbar-section">
       <a href="/" class="btn btn-link">Home</a>
       <a href="/pricing" class="btn btn-link">Pricing</a>
+      {{#user.isAdmin}}
+      <a href="/hosts" class="btn btn-link">Hosts</a>
+      {{/user.isAdmin}}
     </section>
     {{#user}}
     <section class="navbar-section">

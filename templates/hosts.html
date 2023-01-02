@@ -1,0 +1,23 @@
+<h2>Hosts List</h2>
+<table class="table">
+  <thead>
+    <th>Host</th>
+    <th>CPU</th>
+    <th>RAM</th>
+    <th>GPU</th>
+    <th>IP</th>
+    <th>DCIM</th>
+  </thead>
+  <tbody>
+    {{#hosts}}
+    <tr>
+      <td><a href="/host/{{monitor.os.hostname}}">{{monitor.os.hostname}}</a></td>
+      <td>{{monitor.os.cpuThreads}} x {{monitor.os.cpuModel}}</td>
+      <td>{{monitor.os.freememDisp}} / {{monitor.os.totalmemDisp}}</td>
+      <td>{{monitor.gpu.product}}</td>
+      <td>{{monitor.os.ip}}</td>
+      <td>{{monitor.ver}}</td>
+    </tr>
+    {{/hosts}}
+  </tbody>
+</table>

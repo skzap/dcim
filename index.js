@@ -12,5 +12,6 @@ if (isMaster) {
   http.init()
   wss.init()
 } else {
+  monitor.init()
   ws.init()
 }

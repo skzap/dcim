@@ -10,9 +10,9 @@ let wss = {
       this.isAlive = true;
     }
     
-    const server = new WebSocketServer({ port: config.master.ws.port });
+    wss.server = new WebSocketServer({ port: config.master.ws.port });
     
-    server.on('connection', function connection(ws, req) {
+    wss.server.on('connection', function connection(ws, req) {
       ws.isAlive = true;
       
       console.log('New connection from '+req.socket.remoteAddress)
@@ -24,7 +24,13 @@ let wss = {
 
         switch (mess.type) {
           case 'monitor':
+            ws.host = {}
+            ws.host.hostname = mess.data.os.hostname
             hosts.update(mess.data)
+            break;
+
+          case 'execOut':
+            hosts.cmdOutput(ws.host.hostname, mess.data)
             break;
         
           default:
@@ -34,7 +40,7 @@ let wss = {
     });
     
     const interval = setInterval(function ping() {
-      server.clients.forEach(function each(ws) {
+      wss.server.clients.forEach(function each(ws) {
         if (ws.isAlive === false) return ws.terminate();
     
         ws.isAlive = false;
@@ -42,7 +48,7 @@ let wss = {
       });
     }, config.master.ws.pingInterval);
     
-    server.on('close', function close() {
+    wss.server.on('close', function close() {
       clearInterval(interval);
       console.log('Connection closed')
     });

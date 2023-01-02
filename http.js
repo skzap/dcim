@@ -6,6 +6,7 @@ import templater from './templater.js'
 import db from './db.js'
 import { v4 as uuidv4 } from 'uuid'
 import {formatBytes} from './commons.js'
+import wss from './wss.js'
 
 let http = {
   init: async function() {
@@ -13,6 +14,7 @@ let http = {
 
     app.use('/css', express.static('assets/css'))
     app.use('/img', express.static('assets/img'))
+    app.use('/scripts', express.static('assets/scripts'))
     app.use(express.urlencoded({extended:false}))
     app.use(async function(req, res, next) {
       res.header("Access-Control-Allow-Origin", "*");
@@ -46,6 +48,8 @@ let http = {
           let token = cookies[i][1].split('.')[0]
           let username = cookies[i][1].split('.')[1]
           let user = await db.db.collection('accounts').findOne({_id:username, token:token})
+          if (user._id === 'admin')
+            user.isAdmin = true
           return user
         }
       }
@@ -135,33 +139,74 @@ let http = {
       res.redirect('/')
     });
 
-    app.get('/user', async (req, res) => {
+    app.get('/hosts', async (req, res) => {
       let {end, user} = await need(true, req, res)
       if (end) return
-
-      if (user._id === 'admin') {
-        let bareMetal = []
-        bareMetal.push(monitor)
-        for (const hostname in hosts.list)
-          bareMetal.push(hosts.list[hostname])
-
-        for (let i = 0; i < bareMetal.length; i++) {
-          bareMetal[i].os.cpuModel = bareMetal[i].os.cpus[0].model
-          bareMetal[i].os.cpuThreads = bareMetal[i].os.cpus.length
-
-          bareMetal[i].os.freememDisp = formatBytes(bareMetal[i].os.freemem)
-          bareMetal[i].os.totalmemDisp = formatBytes(bareMetal[i].os.totalmem)
-        }
-        res.send(await templater.user({
-          user: user,
-          bareMetal: bareMetal
-        }))
-      } else {
-        // TODO
-        res.send('Not implemented')
+      if (user._id !== 'admin') {
+        res.status(401).send('Unauthorized')
+        return
       }
-      
+
+      console.log(hosts.list)
+      let hostList = []
+      for (const hostname in hosts.list)
+        hostList.push(hosts.list[hostname])
+
+      for (let i = 0; i < hostList.length; i++) {
+        hostList[i].monitor.os.cpuModel = hostList[i].monitor.os.cpus[0].model
+        hostList[i].monitor.os.cpuThreads = hostList[i].monitor.os.cpus.length
+
+        hostList[i].monitor.os.freememDisp = formatBytes(hostList[i].monitor.os.freemem)
+        hostList[i].monitor.os.totalmemDisp = formatBytes(hostList[i].monitor.os.totalmem)
+      }
+      res.send(await templater.hosts({
+        user: user,
+        hosts: hostList
+      }))
     });
+
+    app.get('/host/:hostname', async (req, res) => {
+      let {end, user} = await need(true, req, res)
+      if (end) return
+      if (user._id !== 'admin') {
+        res.status(401).send('Unauthorized')
+        return
+      }
+      let hostname = req.params.hostname
+      let host = hosts.list[hostname]
+
+      if (!host) {
+        fourOhFour(res)
+        return
+      }
+
+      host.monitor.os.cpuModel = host.monitor.os.cpus[0].model
+      host.monitor.os.cpuThreads = host.monitor.os.cpus.length
+
+      host.monitor.os.freememDisp = formatBytes(host.monitor.os.freemem)
+      host.monitor.os.totalmemDisp = formatBytes(host.monitor.os.totalmem)
+      
+      res.send(await templater.host({
+        user: user,
+        host: host,
+        scripts: templater.scripts
+      }))
+    })
+
+    app.post('/host/:hostname', async (req,res) => {
+      let hostname = req.params.hostname
+      if (req.body.cmd) {
+        wss.server.clients.forEach((ws) => {
+          if (ws.host.hostname !== hostname)
+            return
+          ws.send(JSON.stringify({
+            type: 'exec',
+            data: req.body.cmd
+          }))
+        })
+      }
+      res.redirect('/host/'+hostname)
+    })
 
     // 404
     app.get('*', function(req, res){

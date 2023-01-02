@@ -1,8 +1,18 @@
 let hosts = {
   list: {},
+  cmdOutput: (hostname, result) => {
+    if (result.stdout)
+      hosts.list[hostname].cli.out.push(result.stdout)
+    if (result.stderr)
+      hosts.list[hostname].cli.err.push(result.stderr)
+  },
   update: (monitor) => {
     let hostname = monitor.os.hostname
-    hosts.list[hostname] = monitor
+    if (!hosts.list[hostname])
+      hosts.list[hostname] = {
+        cli: {out: [], err: []}
+      }
+    hosts.list[hostname].monitor = monitor
     hosts.list[hostname].lastUpdate = new Date().getTime()
   },
   clear: () => {
