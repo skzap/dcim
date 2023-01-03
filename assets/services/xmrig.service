@@ -1,0 +1,12 @@
+[Unit]
+Description=XMR Miner
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/root/xmrig
+ExecStart=/root/xmrig/xmrig --config=/root/xmrig/config.json
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
