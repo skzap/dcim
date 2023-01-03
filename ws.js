@@ -7,7 +7,7 @@ let ws = {
   client: null,
   pingTimeout: null,
   reconnect: null,
-  init: function(isReconnect = false) {
+  init: function() {
     function heartbeat() {
       clearTimeout(ws.pingTimeout);
       ws.pingTimeout = setTimeout(() => {
@@ -17,6 +17,10 @@ let ws = {
     
     ws.client = new WebSocket('ws://'+config.master.ip+':'+config.master.ws.port);
     
+    ws.client.on('error', (error) => {
+      console.log(error)
+    })
+
     ws.client.on('open', () => {
       heartbeat()
       console.log('Connected to master on '+config.master.ip+':'+config.master.ws.port)
@@ -31,9 +35,11 @@ let ws = {
     ws.client.on('ping', heartbeat);
     ws.client.on('close', function clear() {
       clearTimeout(ws.pingTimeout);
-      ws.reconnect = setInterval(() => {
-        ws.init(true)
-      }, config.slave.ws.reconnectInterval)
+      if (!ws.reconnect) {
+        ws.reconnect = setInterval(() => {
+          ws.init()
+        }, config.slave.ws.reconnectInterval)
+      }
     });
 
     ws.client.on('message', function (mess) {
@@ -61,13 +67,14 @@ let ws = {
       }
     })
 
-    if (!isReconnect)
-      setInterval(() => {
+    if (!ws.monitored) {
+      ws.monitored = setInterval(() => {
         ws.client.send(JSON.stringify({
           type: 'monitor',
           data: monitor
         }))
       }, config.slave.ws.monitorInterval)
+    }
   },
 }
 

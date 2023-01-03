@@ -11,7 +11,7 @@ import wss from './wss.js'
 let http = {
   init: async function() {
     const app = express()
-
+    app.use('/js', express.static('assets/js'))
     app.use('/css', express.static('assets/css'))
     app.use('/img', express.static('assets/img'))
     app.use('/scripts', express.static('assets/scripts'))

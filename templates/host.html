@@ -16,13 +16,15 @@
   </select>
   <input type="submit" value="GO">
 </form>
-<textarea
-  rows="15"
-  cols="100"
-  style="background-color: #000;
-  border: 1px solid #000;
-  color: #00ff00;
-  padding: 8px;
-  font-family: courier new;" disabled>{{host.cli.out}}</textarea>
-
-
+<!-- <br />
+<div id="xterm-container"></div>
+<script>
+  const term = new Terminal()
+  term.open(document.getElementById('xterm-container'))
+  let text = "{{temp.cliout}}"
+  text = unescape(text)
+  text = text.replace(/\n/g, "\r\n")
+  console.log(text)
+  term.write(text)
+</script>
+ -->
