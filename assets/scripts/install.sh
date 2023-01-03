@@ -1,8 +1,6 @@
-cd /root
-git clone https://github.com/skzap/dcim.git
-cd dcim
+pacman -S lshw nodejs-lts-gallium npm
+cd /root/dcim
 npm install
-cp assets/services/dcim.service /etc/systemd/system/dcim.service
-systemctl daemon-reload
+cp /root/dcim/assets/services/dcim.service /etc/systemd/system/dcim.service
 systemctl enable dcim
 systemctl start dcim
