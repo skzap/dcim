@@ -1,9 +1,42 @@
 {{#host}}
 <h1>{{monitor.os.hostname}}</h1>
-<h5>CPU: {{monitor.os.cpuThreads}} x {{monitor.os.cpuModel}}</h5>
-<h5>RAM: {{monitor.os.freememDisp}} / {{monitor.os.totalmemDisp}}</h5>
-<h5>GPU: {{monitor.gpu.product}}</h5>
-<h5>Storage: </h5>
+
+<h4>CPU</h4>
+{{monitor.os.cpuThreads}} x {{monitor.os.cpuModel}}
+
+<h4>RAM</h4>
+{{monitor.os.freememDisp}} / {{monitor.os.totalmemDisp}}
+
+<h4>GPU</h4>
+{{monitor.gpu.product}}
+
+<h4>Storage</h4>
+<table class="table">
+  <thead>
+    <th>Filesystem</th>
+    <th>Size</th>
+    <th>Used</th>
+    <th>Avail</th>
+    <th>Use%</th>
+    <th>Mounted on</th>
+  </thead>
+  <tbody>
+    {{#monitor.disks}}
+    <tr>
+      <td>{{filesystem}}</td>
+      <td>{{size}}</td>
+      <td>{{used}}</td>
+      <td>{{avail}}</td>
+      <td>{{use_percent}}</td>
+      <td>{{mounted_on}}</td>
+    </tr>
+    {{/monitor.disks}}
+  </tbody>
+</table>
+
+<h4>Sensors</h4>
+<pre>{{monitor.sensorsDisp}}</pre>
+
 {{/host}}
 
 <h2>Run Script</h2>

@@ -184,6 +184,8 @@ let http = {
 
       host.monitor.os.freememDisp = formatBytes(host.monitor.os.freemem)
       host.monitor.os.totalmemDisp = formatBytes(host.monitor.os.totalmem)
+
+      host.monitor.sensorsDisp = JSON.stringify(host.monitor.sensors, null, 2)
       
       res.send(await templater.host({
         user: user,

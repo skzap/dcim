@@ -1,5 +1,5 @@
 let config = {
-  version: '0.1.1',
+  version: '0.1.2',
   rootDirectory: '/root/dcim/',
   master: {
     ip: '192.168.1.193',
@@ -21,9 +21,11 @@ let config = {
   }
 }
 
-// COMMENT FOR PRODUCTION
-config.rootDirectory = '/home/dr/Coding/dcim/'
-config.master.ip = '127.0.0.1'
+// UNCOMMENT FOR DEV
+
+// config.rootDirectory = '/home/dr/Coding/dcim/'
+// config.master.ip = '127.0.0.1'
+
 // END COMMENT
 
 export default config

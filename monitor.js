@@ -5,8 +5,11 @@ import config from './config.js'
 let monitor = {
   os: {},
   gpu: {},
+  disks: [],
+  sensors: {},
   ver: config.version,
   init: () => {
+    // GPU
     exec('lshw -c video', (error, stdout, stderr) => {
       let lines = stdout.split('\n')
       let product, vendor
@@ -21,7 +24,11 @@ let monitor = {
       monitor.gpu.product = product
       monitor.gpu.vendor = vendor
     });
+
+    refreshDisks()
+    refreshSensors()
     
+    // all other information
     for (const fname in os) {
       if (typeof os[fname] === 'function') {
         if (fname == 'setPriority')
@@ -36,12 +43,50 @@ let monitor = {
           monitor.os.ip = net[i].address
       }
     }
-    setInterval(refreshSpecs, 5000)
+    setInterval(() => {
+      refreshSpecs()
+      refreshDisks()
+      refreshSensors()
+    }, 5000)
     function refreshSpecs() {
       monitor.os.cpus = os.cpus()
       monitor.os.freemem = os.freemem()
       monitor.os.loadavg = os.loadavg()
       monitor.os.uptime = os.uptime()
+    }
+
+    function refreshDisks() {
+      // disks storage
+      exec('df -t ext4', (error, stdout, stderr) => {
+        let lines = stdout.split('\n')
+        lines.splice(0,1)
+        lines.splice(lines.length-1,1)
+
+        let disks = []
+        for (let i = 0; i < lines.length; i++) {
+          let line = lines[i]
+          line = line.split(' ')
+          for (let y = line.length-1; y >= 0; y--)
+            if (line[y] === '')
+              line.splice(y,1)
+          disks.push({
+            filesystem: line[0],
+            size: line[1],
+            used: line[2],
+            avail: line[3],
+            use_percent: line[4],
+            mounted_on: line[5]
+          })
+        }
+        monitor.disks = disks
+      });
+    }
+
+    function refreshSensors() {
+      // sensors
+      exec('sensors -j', (error, stdout, stderr) => {
+        monitor.sensors = JSON.parse(stdout)
+      })
     }
   }
 }
