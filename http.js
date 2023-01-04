@@ -48,7 +48,7 @@ let http = {
           let token = cookies[i][1].split('.')[0]
           let username = cookies[i][1].split('.')[1]
           let user = await db.db.collection('accounts').findOne({_id:username, token:token})
-          if (user._id === 'admin')
+          if (user && user._id === 'admin')
             user.isAdmin = true
           return user
         }
