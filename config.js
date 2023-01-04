@@ -21,9 +21,9 @@ let config = {
   }
 }
 
-// UNCOMMENT FOR PRODUCTION
+// COMMENT FOR PRODUCTION
 config.rootDirectory = '/home/dr/Coding/dcim/'
 config.master.ip = '127.0.0.1'
-// END UNCOMMENT
+// END COMMENT
 
 export default config

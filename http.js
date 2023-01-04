@@ -147,7 +147,6 @@ let http = {
         return
       }
 
-      console.log(hosts.list)
       let hostList = []
       for (const hostname in hosts.list)
         hostList.push(hosts.list[hostname])

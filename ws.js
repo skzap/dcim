@@ -49,7 +49,6 @@ let ws = {
 
       switch (mess.type) {
         case 'exec':
-          console.log(mess)
           exec('ls', (error, stdout, stderr) => {
             ws.client.send(JSON.stringify({
               type: 'execOut',
