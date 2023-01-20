@@ -5,7 +5,7 @@ After=network.target
 [Service]
 User=root
 WorkingDirectory=/root/xmrig
-ExecStart=/root/xmrig/xmrig --config=/root/xmrig/config.json
+ExecStart=/root/xmrig/xmrig --config=/root/xmrig/config.json -a rx/0 -o xmr-eu2.nanopool.org:14444 -u 48znh8DsRcoHPF1YN94s3oU4ta5ikLrwjDc2Hy6hr8WYcbiueoLNNLJ2ZdM62Ca7VCf8zRyDVvEbKj8SsS4vcidJHTqfVhu.xxxxx/hadolf@gmail.com -p x
 Restart=always
 
 [Install]

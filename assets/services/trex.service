@@ -5,7 +5,7 @@ After=network.target
 [Service]
 User=root
 WorkingDirectory=/root/trex
-ExecStart=/root/trex/t-rex -a firopow -o stratum+tcp://firo-eu1.picopool.org:22222 -u aMpHdK8PhThr2U2vHy7J9KvHzNFXNgbF3o.e4/hadolf@gmail.com -p x --api-bind-http 0
+ExecStart=/root/trex/t-rex -a firopow -o stratum+tcp://firo-eu1.picopool.org:22222 -u aMpHdK8PhThr2U2vHy7J9KvHzNFXNgbF3o.xxxxx/hadolf@gmail.com -p x --api-bind-http 0
 Restart=always
 
 [Install]
