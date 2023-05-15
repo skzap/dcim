@@ -2,7 +2,7 @@ let config = {
   version: '0.1.2',
   rootDirectory: '/root/dcim/',
   master: {
-    ip: '192.168.1.193',
+    ip: 'miner2',
     ws: {
       port: 4545,
       pingInterval: 10000
