@@ -7,6 +7,7 @@ import db from './db.js'
 import { v4 as uuidv4 } from 'uuid'
 import {formatBytes} from './commons.js'
 import wss from './wss.js'
+import * as fs from 'fs'
 
 let http = {
   init: async function() {
@@ -137,6 +138,47 @@ let http = {
     app.get('/logout', (req, res) => {
       res.clearCookie('auth');
       res.redirect('/')
+    });
+
+    app.get('/charts', async (req, res) => {
+      let {end, user} = await need(true, req, res)
+      if (end) return
+      if (user._id !== 'admin') {
+        res.status(401).send('Unauthorized')
+        return
+      }
+
+      let data = fs.readFileSync("log.csv")
+      data = data.toString()
+      data = data.split('\n')
+      data.splice(data.length-1,1)
+      for (let i = 0; i < data.length; i++)
+        data[i] = data[i].split(',')
+      
+      let ts = []
+      let temp = []
+      let hum = []
+      for (let i = 0; i < data.length; i++) {
+        ts.push(data[i][0])
+        temp.push(data[i][1])
+        hum.push(data[i][2])
+      }
+      
+      temp = JSON.stringify(temp)
+      hum = JSON.stringify(hum)
+      ts = JSON.stringify(ts)
+      temp = temp.replace(/['"]+/g, '')
+      hum = hum.replace(/['"]+/g, '')
+      ts = ts.replace(/['"]+/g, '')
+
+      console.log(ts,temp,hum)
+      
+      res.send(await templater.charts({
+        user: user,
+        ts: ts,
+        temp: temp,
+        hum: hum
+      }))
     });
 
     app.get('/hosts', async (req, res) => {

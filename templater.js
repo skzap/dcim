@@ -42,6 +42,11 @@ let templater = {
     let root = Mustache.render(templater.templates.root, Object.assign(data, constants))
     let host = Mustache.render(templater.templates.host, Object.assign(data, constants))
     return root.replace('@@CONTENT@@', host)
+  },
+  charts: async (data) => {
+    let root = Mustache.render(templater.templates.root, Object.assign(data, constants))
+    let charts = Mustache.render(templater.templates.charts, Object.assign(data, constants))
+    return root.replace('@@CONTENT@@', charts)
   }
 }
 

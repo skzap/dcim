@@ -1,0 +1,36 @@
+<h2>Temperature / Humidity</h2>
+<div>
+  <canvas id="tempHum"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('myChart')
+
+  new Chart('tempHum', {
+    type: 'line',
+    data: {
+      labels: {{ts}},
+      datasets: [{
+          label: 'Temperature',
+          yAxisID: 'yAxis-TEMP',
+          data: {{temp}},
+          borderColor: 'red',
+          fill: false
+        },
+        {
+          label: 'Humidity',
+          yAxisID: 'yAxis-HUM',
+          data: {{hum}},
+          borderColor: 'blue',
+          fill: false
+        }
+      ]
+    },
+    options: {
+      scales: { 
+        
+      }
+    }
+  })
+</script>
