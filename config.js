@@ -23,8 +23,8 @@ let config = {
 
 // UNCOMMENT FOR DEV
 
-config.rootDirectory = '/home/dr/Coding/dcim/'
-config.master.ip = '127.0.0.1'
+// config.rootDirectory = '/home/dr/Coding/dcim/'
+// config.master.ip = '127.0.0.1'
 
 // END COMMENT
 
