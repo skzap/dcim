@@ -171,7 +171,7 @@ let http = {
       hum = hum.replace(/['"]+/g, '')
       ts = ts.replace(/['"]+/g, '')
 
-      console.log(ts,temp,hum)
+      //console.log(ts,temp,hum)
       
       res.send(await templater.charts({
         user: user,
@@ -200,6 +200,9 @@ let http = {
         hostList[i].monitor.os.freememDisp = formatBytes(hostList[i].monitor.os.freemem)
         hostList[i].monitor.os.totalmemDisp = formatBytes(hostList[i].monitor.os.totalmem)
       }
+
+      hostList.sort((a, b) => a.monitor.os.hostname.localeCompare(b.monitor.os.hostname))
+
       res.send(await templater.hosts({
         user: user,
         hosts: hostList
